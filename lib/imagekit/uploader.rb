@@ -7,13 +7,13 @@ class Imagekit::Uploader
 
   def self.build_upload_params(options)
     params = {
-      file:     options[:file],
-      filename: options[:filename],
-      apiKey: Imagekit.configuration.public_key,
-      signature: @signature,
-      timestamp: Time.now.to_i,
+      file:              options[:file],
+      filename:          options[:filename],
+      apiKey:            Imagekit.configuration.public_key,
+      signature:         @signature,
+      timestamp:         Time.now.to_i,
       useUniqueFilename: options[:use_unique_filename],
-      folder: options[:folder]
+      folder:            options[:folder]
     }
   end
 
@@ -49,18 +49,18 @@ class Imagekit::Uploader
     
     RestClient::Request.execute(method: :post, url: api_url, payload: params.reject { |k, v| v.nil? || v == "" }, timeout: 60, headers: headers) do
     |response, request, tmpresult|
-      raise ImagekitException, "Server returned unexpected status code - #{response.code} - #{response.body}" unless [200, 400, 401, 403, 404, 500].include?(response.code)
+      raise Imagekit::ImagekitException, "Server returned unexpected status code - #{response.code} - #{response.body}" unless [200, 400, 401, 403, 404, 500].include?(response.code)
       begin
         result = JSON.parse(response.body)
       rescue => e
-        # Error is parsing json
-        raise ImagekitException, "Error parsing server response (#{response.code}) - #{response.body}. Got - #{e}"
+        # Error in json parsing
+        raise Imagekit::ImagekitException, "Error parsing server response (#{response.code}) - #{response.body}. Got - #{e}"
       end
       if result["error"]
         if return_error
           result["error"]["http_code"] = response.code
         else
-          raise ImagekitException, result["error"]["message"]
+          raise Imagekit::ImagekitException, result["error"]["message"]
         end
       end
     end

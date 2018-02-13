@@ -2,27 +2,6 @@ require 'digest/md5'
 
 module ImagekitHelper
 
-  PREDEFINED_TRANSFORMATION = {
-    "crop"                 => "c",
-    "quality"              => "q",
-    "format"               => "f",
-    "progressive_jpeg"     => "pr",
-    "image_metadata"       => "md",
-    "color_profile"        => "cp",
-    "rotate"               => "rt",
-    "radius"               => "r",
-    "background"           => "bg",
-    "blur"                 => "bl",
-    "border"               => "b",
-    "dpr"                  => "dpr",
-    "overlay_image"        => "oi",
-    "named_transformation" => "n",
-    "contrast"             => "e-contrast",
-    "sharpen"              => "e-sharpen",
-    "height"               => "h",
-    "width"                => "w"
-  }
-
   def im_image_tag(source, options = {})
     imagekit_tag source, options do |source, options|
       if source
@@ -46,12 +25,12 @@ module ImagekitHelper
   private
 
     def imagekit_url_internal(source, options)
-      return source unless options.present?
+      return source unless options[:transformation].present?
       image_name = source.match( /[-_\w:]+\.(jpe?g|png|gif)$/i).to_s
       source.slice!(image_name)
       array = []
       options[:transformation].each do |k, v|
-        key = PREDEFINED_TRANSFORMATION[k.to_s]
+        key = Imagekit::Utils::PREDEFINED_TRANSFORMATION[k.to_s]
         array << "#{key}-#{v}"
       end
       transformation_string = array.size > 0 ? "tr:#{array.join(',')}" : nil

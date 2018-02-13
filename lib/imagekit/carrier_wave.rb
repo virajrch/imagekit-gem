@@ -75,9 +75,6 @@ module Imagekit::CarrierWave
     nil
   end
 
-  # If the user overrode public_id, that should be used, even if it's different from current public_id in the database.
-  # Otherwise, try to use public_id from the database.
-  # Otherwise, generate a new random public_id
   def my_public_id
     @public_id ||= self.public_id
     @public_id ||= @stored_public_id
@@ -88,9 +85,9 @@ module Imagekit::CarrierWave
     public_id_overwrite = self.public_id
     to_public_id ||= public_id_overwrite
     if public_id_overwrite && to_public_id != public_id_overwrite
-      raise ImagekitException, "The public_id method was overridden and returns #{public_id_overwrite} - can't rename to #{to_public_id}"
+      raise Imagekit::ImagekitException, "The public_id method was overridden and returns #{public_id_overwrite} - can't rename to #{to_public_id}"
     elsif to_public_id.nil?
-      raise ImagekitException, "No to_public_id given"
+      raise Imagekit::ImagekitException, "No to_public_id given"
     end
 
     from_public_id = @stored_public_id || self.my_public_id
@@ -194,7 +191,7 @@ module Imagekit::CarrierWave
   end
 
   def default_format
-    "png"
+    "auto"
   end
 
   def storage_type

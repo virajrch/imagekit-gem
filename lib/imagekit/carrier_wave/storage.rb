@@ -6,7 +6,7 @@ class Imagekit::CarrierWave::Storage < ::CarrierWave::Storage::Abstract
       case file
       when Imagekit::CarrierWave::PreloadedImagekitFile
         storage_type = uploader.class.storage_type || "upload"
-        raise ImagekitException, "Uploader configured for type #{storage_type} but resource of type #{file.type} given." if storage_type.to_s != file.type
+        raise Imagekit::ImagekitException, "Uploader configured for type #{storage_type} but resource of type #{file.type} given." if storage_type.to_s != file.type
         if uploader.public_id && uploader.auto_rename_preloaded?
           @stored_version = file.version
           uploader.rename(nil, true)
@@ -38,7 +38,7 @@ class Imagekit::CarrierWave::Storage < ::CarrierWave::Storage::Abstract
       uploader.metadata = Imagekit::Uploader.upload(data, {apiKey: Imagekit.configuration.public_key, filename: params[:public_id], timestamp: Time.now.to_i})
       
       if uploader.metadata["exception"]
-        raise ImagekitException, "Server returned unexpected status code - #{response.code} - #{response.body}" unless [200, 400, 401, 403, 404, 500].include?(response.code)
+        raise Imagekit::ImagekitException, "Server returned unexpected status code - #{response.code} - #{response.body}" unless [200, 400, 401, 403, 404, 500].include?(response.code)
       end
 
       if uploader.metadata["url"]
@@ -47,7 +47,7 @@ class Imagekit::CarrierWave::Storage < ::CarrierWave::Storage::Abstract
       end
       # Will throw an exception on error
     else
-      raise ImagekitException, "nested versions are not allowed." if (uploader.class.version_names.length > 1)
+      raise Imagekit::ImagekitException, "nested versions are not allowed." if (uploader.class.version_names.length > 1)
       # Do nothing - versions are not handled locally.
     end
     nil
@@ -98,7 +98,7 @@ class Imagekit::CarrierWave::Storage < ::CarrierWave::Storage::Abstract
       model_class.where(:_id=>uploader.model._id).update_all(column=>name)
       uploader.model.send :write_attribute, column, name
     else
-      raise ImagekitException, "Only ActiveRecord, Mongoid and Sequel are supported at the moment!"
+      raise Imagekit::ImagekitException, "Only ActiveRecord, Mongoid and Sequel are supported at the moment!"
     end
   end
 end

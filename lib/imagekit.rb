@@ -7,10 +7,14 @@ module Imagekit
   autoload :PreloadedFile, "imagekit/preloaded_file"
   autoload :CarrierWave, "imagekit/carrier_wave"
 
+  # Exception class
   class ImagekitException < StandardError;end
-  # This is class for initialize the secret key
+
+  # Constants
   USER_AGENT = "ImagekitRuby/" + VERSION
   ENDPOINT   = 'https://ik.imagekit.io'
+
+  # This is class for initialize the secret key
   class Configuration
     attr_accessor :public_key, :private_key, :imagekit_id
 

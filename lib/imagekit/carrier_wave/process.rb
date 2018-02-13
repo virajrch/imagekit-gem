@@ -21,43 +21,44 @@ module Imagekit::CarrierWave
       process :resize_to_limit => [width, height]
     end
 
-    def resize_to_fit(width, height)
-      process :resize_to_fit => [width, height]
+    def resize_to_fit(width, height, crop='fit')
+      process :resize_to_fit => [width, height, crop]
     end
 
-    def resize_to_fill(width, height, gravity="Center")
-      process :resize_to_fill => [width, height, gravity]
+    def resize_to_fill(width, height, crop="maintain_ratio")
+      process :resize_to_fill => [width, height, crop]
     end
 
-    def resize_and_pad(width, height, background=:transparent, gravity="Center")
-      process :resize_and_pad => [width, height, background, gravity]
+    def resize_and_pad(width, height, crop="at_max")
+      process :resize_and_pad => [width, height, crop]
     end
 
-    def scale(width, height)
-      process :scale => [width, height]
+    def scale(width, height, crop="at_least")
+      process :scale => [width, height, crop]
     end
 
-    def crop(width, height, gravity="Center")
-      process :crop => [width, height, gravity]
+    def crop(width, height, crop="maintain_ratio")
+      process :crop => [width, height, crop]
     end
 
     def imagekit_transformation(options)
-      process :imagekit_transformation => options
+      process imagekit_transformation: options[:transformation]
     end
 
     def tags(*tags)
-      process :tags=>tags
+      process tags: tags
     end
   end
 
   def set_or_yell(hash, attr, value)
-    raise ImagekitException, "conflicting transformation on #{attr} #{value}!=#{hash[attr]}" if hash[attr] && hash[attr] != value
+    raise Imagekit::ImagekitException, "conflicting transformation on #{attr} #{value}!=#{hash[attr]}" if hash[attr] && hash[attr] != value
     hash[attr] = value
   end
 
   def transformation
     return @transformation if @transformation
     @transformation = {}
+
     self.all_processors.each do |name, args, condition|
 
       if(condition)
@@ -69,7 +70,8 @@ module Imagekit::CarrierWave
       end
 
       case name
-      when :convert # Do nothing. This is handled by format
+      when :convert
+        set_or_yell(@transformation, :format, args)
       when :resize_to_limit
         set_or_yell(@transformation, :width, args[0])
         set_or_yell(@transformation, :height, args[1])
@@ -77,27 +79,23 @@ module Imagekit::CarrierWave
       when :resize_to_fit
         set_or_yell(@transformation, :width, args[0])
         set_or_yell(@transformation, :height, args[1])
-        set_or_yell(@transformation, :crop, :fit)
+        set_or_yell(@transformation, :crop, :force)
       when :resize_to_fill
         set_or_yell(@transformation, :width, args[0])
         set_or_yell(@transformation, :height, args[1])
-        set_or_yell(@transformation, :gravity, args[2].to_s.downcase)
-        set_or_yell(@transformation, :crop, :fill)
+        set_or_yell(@transformation, :crop, :maintain_ratio)
       when :resize_and_pad
         set_or_yell(@transformation, :width, args[0])
         set_or_yell(@transformation, :height, args[1])
-        set_or_yell(@transformation, :background, args[2].to_s.downcase)
-        set_or_yell(@transformation, :gravity, args[3].to_s.downcase)
-        set_or_yell(@transformation, :crop, :pad)
+        set_or_yell(@transformation, :crop, :at_max)
       when :scale
         set_or_yell(@transformation, :width, args[0])
         set_or_yell(@transformation, :height, args[1])
-        set_or_yell(@transformation, :crop, :scale)
+        set_or_yell(@transformation, :crop, :at_least)
       when :crop
         set_or_yell(@transformation, :width, args[0])
         set_or_yell(@transformation, :height, args[1])
-        set_or_yell(@transformation, :gravity, args[2].to_s.downcase)
-        set_or_yell(@transformation, :crop, :crop)
+        set_or_yell(@transformation, :crop, :maintain_ratio)
       when :imagekit_transformation
         args.each do
           |attr, value|
@@ -131,7 +129,7 @@ module Imagekit::CarrierWave
 
   def tags
     @tags ||= self.all_processors.select{|processor| processor[0] == :tags}.map(&:second).first
-    raise ImagekitException, "tags cannot be used in versions." if @tags.present? && self.version_name.present?
+    raise Imagekit::ImagekitException, "tags cannot be used in versions." if @tags.present? && self.version_name.present?
     @tags
   end
 
