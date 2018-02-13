@@ -46,6 +46,7 @@ class Imagekit::Uploader
     headers                  = { "User-Agent" => Imagekit::USER_AGENT }
     headers['Content-Type']  = options[:content_type] || 'multipart/form-data'
     headers.merge!(options[:extra_headers]) if options[:extra_headers]
+    
     RestClient::Request.execute(method: :post, url: api_url, payload: params.reject { |k, v| v.nil? || v == "" }, timeout: 60, headers: headers) do
     |response, request, tmpresult|
       raise ImagekitException, "Server returned unexpected status code - #{response.code} - #{response.body}" unless [200, 400, 401, 403, 404, 500].include?(response.code)
