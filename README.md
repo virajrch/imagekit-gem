@@ -55,7 +55,7 @@ end
 
 ### Embedding and transforming images
 
-Any image uploaded to Cloudinary can be transformed and embedded using powerful view helper methods:
+Any image uploaded to Imagekit can be transformed and embedded using powerful view helper methods:
 
 The following example generates an image of an uploaded `default-image` image while transforming it to crop a 100x150 rectangle:
 
