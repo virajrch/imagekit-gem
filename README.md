@@ -91,9 +91,16 @@ Here are the possible transformation options with valid values.
 18. sharpen (Valid Values: e-sharpen)
 ```
 
-
-
 `NOTE - You can provide the imagekit transformation options inside the transformation hash of im_image_tag`
+
+### Upload
+
+Assuming you have your Imagekit configuration parameters defined (`public key`, `private key`, `imagekit id`), uploading to Cloudinary is very simple.
+    
+The following example uploads a local JPG to the cloud: 
+
+    Imagekit::Uploader.upload("my_picture.jpg", filename: 'my_picture')
+
 
 ## Development
 
