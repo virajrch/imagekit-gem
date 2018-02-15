@@ -55,7 +55,7 @@ end
 
 ### Embedding and transforming images
 
-Any image uploaded to Cloudinary can be transformed and embedded using powerful view helper methods:
+Any image uploaded to Imagekit can be transformed and embedded using powerful view helper methods:
 
 The following example generates an image of an uploaded `default-image` image while transforming it to crop a 100x150 rectangle:
 
@@ -95,7 +95,7 @@ Here are the possible transformation options with valid values.
 
 ### Upload
 
-Assuming you have your Imagekit configuration parameters defined (`public key`, `private key`, `imagekit id`), uploading to Cloudinary is very simple.
+Assuming you have your Imagekit configuration parameters defined (`public key`, `private key`, `imagekit id`), uploading to Imagekit is very simple.
     
 The following example uploads a local JPG to the cloud: 
 
