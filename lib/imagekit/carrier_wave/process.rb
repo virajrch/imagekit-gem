@@ -75,7 +75,7 @@ module Imagekit::CarrierWave
       when :resize_to_limit
         set_or_yell(@transformation, :width, args[0])
         set_or_yell(@transformation, :height, args[1])
-        set_or_yell(@transformation, :crop, :limit)
+        set_or_yell(@transformation, :crop, :maintain_ratio)
       when :resize_to_fit
         set_or_yell(@transformation, :width, args[0])
         set_or_yell(@transformation, :height, args[1])
