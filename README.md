@@ -101,6 +101,48 @@ The following example uploads a local JPG to the cloud:
 
     Imagekit::Uploader.upload("my_picture.jpg", filename: 'my_picture')
 
+## Imagekit with carrierwave
+
+If you would like to use our optional integration module of image uploads with ActiveRecord or Mongoid using Imagekit, install Imagekit GEM:
+
+    $ gem 'carrierwave'
+    $ gem 'imagekit'
+
+###### Note: `The CarrierWave GEM should be loaded before the Imagekit GEM.`.
+Below we have provided quick instructions for using Cloudinary with CarrierWave in your Rails project.
+
+In our example, we have the Post model entity. You can attach an image to each post. Attached images are managed by the 'picture' attribute (column) of the Post entity.
+
+To get started, first define a CarrierWave uploader class and tell it to use the Imagekit gem. ([See CarrierWave documentation](https://github.com/carrierwaveuploader/carrierwave) for more details).
+
+```
+class PictureUploader < CarrierWave::Uploader::Base
+  include Imagekit::CarrierWave
+ 
+  # Generate a 164x164 JPG of 80% quality 
+  # Possible cropping options are as following :
+  # maintain_ratio -> resize_to_limit, resize_to_fill or crop
+  # force          -> resize_to_fit
+  # at_max         -> resize_and_pad
+  # at_least       -> scale
+  ## You can pass all possible transformations in the transformation hash.
+  version :cropped do
+    process resize_to_fill: [164, 164]
+    process convert: 'jpg'
+    imagekit_transformation transformation: { quality: 80, rotate: 90 }
+  end
+  # You can access the url like post.picture.cropped.url or post.picture.url(:cropped)
+
+
+  ## You can use standalone transformation options as in the example below
+  # Rotate an image to 90 degree.
+  version :rotated do
+    imagekit_transformation transformation: { rotate: 90 }
+  end
+  # You can access the url like post.picture.rotated.url or post.picture.url(:rotated)
+
+end
+```
 
 ## Development
 
