@@ -97,7 +97,7 @@ Here are the possible transformation options with valid values.
 
 Assuming you have your Imagekit configuration parameters defined (`public key`, `private key`, `imagekit id`), uploading to Imagekit is very simple.
     
-The following example uploads a local JPG to the cloud: 
+The following example uploads a local JPG to the imagekit: 
 
     Imagekit::Uploader.upload("my_picture.jpg", filename: 'my_picture')
 
@@ -109,7 +109,7 @@ If you would like to use our optional integration module of image uploads with A
     $ gem 'imagekit'
 
 ###### Note: `The CarrierWave GEM should be loaded before the Imagekit GEM.`.
-Below we have provided quick instructions for using Cloudinary with CarrierWave in your Rails project.
+Below we have provided quick instructions for using imagekit with CarrierWave in your Rails project.
 
 In our example, we have the Post model entity. You can attach an image to each post. Attached images are managed by the 'picture' attribute (column) of the Post entity.
 
