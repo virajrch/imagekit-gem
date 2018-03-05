@@ -16,12 +16,13 @@ module Imagekit
 
   # This is class for initialize the secret key
   class Configuration
-    attr_accessor :public_key, :private_key, :imagekit_id
+    attr_accessor :public_key, :private_key, :imagekit_id, :cname
 
     def initialize
       self.public_key  = nil
       self.private_key = nil
       self.imagekit_id = nil
+      self.cname       = nil
     end
   end
 

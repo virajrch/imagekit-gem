@@ -18,13 +18,19 @@ class Imagekit::Utils
     "contrast"             => "e-contrast",
     "sharpen"              => "e-sharpen",
     "height"               => "h",
-    "width"                => "w"
+    "width"                => "w",
+    "focus"                => "fo"
   }
 
   def self.imagekit_url(public_id, options = {})
     imagekit_endpoint = Imagekit::ENDPOINT
     imagekit_id = Imagekit.configuration.imagekit_id
-    source = "#{imagekit_endpoint}/#{imagekit_id}"
+    cname       = Imagekit.configuration.cname
+    source = if cname.present?
+      "https://#{cname}.imagekit.io"
+    else
+      "#{imagekit_endpoint}/#{imagekit_id}"
+    end
     url = imagekit_transformed_url(source, options)
     result = "#{url}/#{public_id}"
     return result

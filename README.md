@@ -49,9 +49,12 @@ Imagekit.configure do |config|
   config.public_key =  'E/bDwTissZtxxxxxxxxxxxxxxxxx'
   config.private_key = 'WMXM/R+8g8Lxxxxxxxxxxxxxxxxx'
   config.imagekit_id = 'b1wxxxxxx'
+  config.cname       = 'demo'
 end
 
 ```
+
+`If you put cname in config, then the image url transformation would be https://demo.imagekit.io`
 
 ### Embedding and transforming images
 
@@ -61,6 +64,11 @@ The following example generates an image of an uploaded `default-image` image wh
 
 ```
 im_image_tag("https://ik.imagekit.io/demo/default-image.jpg", transformation: { height: 150, width: 100 })
+```
+
+With CNAME
+```
+im_image_tag("https://demo.imagekit.io/default-image.jpg", transformation: { height: 150, width: 100 })
 ```
 
 The following example generates an image of an uploaded `default-image` image while change the image quality to 80:
@@ -89,6 +97,7 @@ Here are the possible transformation options with valid values.
 16. named_transformation
 17. contrast (Valid Values: e-contrast)
 18. sharpen (Valid Values: e-sharpen)
+19. Focus (Valid Values: center, centre, top, left, bottom, right, top_left, top_right, bottom_left, bottom_right, auto )
 ```
 
 `NOTE - You can provide the imagekit transformation options inside the transformation hash of im_image_tag`
