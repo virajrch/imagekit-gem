@@ -46,10 +46,11 @@ Replace the corresponding values
 
 ```
 Imagekit.configure do |config|
-  config.public_key =  'E/bDwTissZtxxxxxxxxxxxxxxxxx'
-  config.private_key = 'WMXM/R+8g8Lxxxxxxxxxxxxxxxxx'
-  config.imagekit_id = 'b1wxxxxxx'
-  config.cname       = 'demo'
+  config.public_key     =  'E/bDwTissZtxxxxxxxxxxxxxxxxx'
+  config.private_key    = 'WMXM/R+8g8Lxxxxxxxxxxxxxxxxx'
+  config.imagekit_id    = 'b1wxxxxxx'
+  #config.use_subdomain  = false (default false)
+  #config.use_secure     = true (default true)
 end
 
 ```

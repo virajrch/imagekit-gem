@@ -3,7 +3,7 @@ require 'json'
 
 class Imagekit::Uploader
   REMOTE_URL_REGEX = %r(^ftp:|^https?:|^s3:|^data:[^;]*;base64,([a-zA-Z0-9\/+\n=]+)$)
-  UPLOAD_URL = 'http://upload.imagekit.io/rest/api/image/v2/'
+  UPLOAD_URL = 'https://upload.imagekit.io/rest/api/image/v2/'
 
   def self.build_upload_params(options)
     params = {
