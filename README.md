@@ -94,7 +94,7 @@ Here are the possible transformation options with valid values.
 12. blur (Valid Values: Integers from 1 to 100)
 13. border (A valid value would look like b-10_FF0000. This would add a constant border of 10px with color code #FF0000 around the image. If the original image dimension is 200x200, then after applying the border, the dimensions would be 220x220.)
 14. dpr (Valid Values: 0.1 to 5.0)
-15. overlay_image (Valid value: any uploaded image e.g. http://ik.imagekit.io/demo/logo-white_SJwqB4Nfe.png)
+15. overlay_image (Valid value: any uploaded image e.g. logo-white_SJwqB4Nfe.png)
 16. named_transformation
 17. contrast (Valid Values: e-contrast)
 18. sharpen (Valid Values: e-sharpen)
