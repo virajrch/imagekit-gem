@@ -12,16 +12,19 @@ module Imagekit
 
   # Constants
   USER_AGENT = "ImagekitRuby/" + VERSION
-  ENDPOINT   = 'https://ik.imagekit.io'
+  SECURED_ENDPOINT   = 'https://ik.imagekit.io'
+  UNSECURE_ENDPOINT  = 'http://ik.imagekit.io'
 
   # This is class for initialize the secret key
   class Configuration
-    attr_accessor :public_key, :private_key, :imagekit_id
+    attr_accessor :public_key, :private_key, :imagekit_id, :use_subdomain, :use_secure
 
     def initialize
-      self.public_key  = nil
-      self.private_key = nil
-      self.imagekit_id = nil
+      self.public_key    = nil
+      self.private_key   = nil
+      self.imagekit_id   = nil
+      self.use_subdomain = false
+      self.use_secure    = true
     end
   end
 

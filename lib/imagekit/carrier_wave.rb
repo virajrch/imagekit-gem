@@ -50,7 +50,7 @@ module Imagekit::CarrierWave
       end
       options = self.transformation.merge(options) if self.version_name.present?
 
-      Imagekit::Utils.imagekit_url(public_id, {:format=>self.format, :resource_type=>self.resource_type, :type=>self.storage_type}.merge(options))
+      Imagekit::Utils.imagekit_url(public_id, {:image_format=>self.format, :resource_type=>self.resource_type, :type=>self.storage_type}.merge(options))
     end
   end
 
@@ -78,7 +78,6 @@ module Imagekit::CarrierWave
   def my_public_id
     @public_id ||= self.public_id
     @public_id ||= @stored_public_id
-    @public_id ||= Imagekit::Utils.random_public_id
   end
 
   def rename(to_public_id = nil, overwrite=false)

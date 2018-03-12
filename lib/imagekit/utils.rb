@@ -18,15 +18,29 @@ class Imagekit::Utils
     "contrast"             => "e-contrast",
     "sharpen"              => "e-sharpen",
     "height"               => "h",
-    "width"                => "w"
+    "width"                => "w",
+    "focus"                => "fo"
   }
 
   def self.imagekit_url(public_id, options = {})
-    imagekit_endpoint = Imagekit::ENDPOINT
+    imagekit_endpoint = if Imagekit.configuration.use_secure
+      Imagekit::SECURED_ENDPOINT
+    else
+      Imagekit::UNSECURE_ENDPOINT
+    end
     imagekit_id = Imagekit.configuration.imagekit_id
-    source = "#{imagekit_endpoint}/#{imagekit_id}"
+    source = if Imagekit.configuration.use_subdomain
+      protocol = Imagekit.configuration.use_secure ? 'https' : 'http'
+      "#{protocol}://#{imagekit_id}.imagekit.io"
+    else
+      "#{imagekit_endpoint}/#{imagekit_id}"
+    end
     url = imagekit_transformed_url(source, options)
-    result = "#{url}/#{public_id}"
+    if options[:image_format].eql?('auto')
+      result = "#{url}/tr:f-auto/#{public_id}"
+    else
+      result = "#{url}/#{public_id}.#{options[:image_format]}"
+    end
     return result
   end
 
@@ -51,10 +65,6 @@ class Imagekit::Utils
     case
     when self.supported_format?(format, IMAGE_FORMATS)
       'image'
-    when self.supported_format?(format, VIDEO_FORMATS)
-      'video'
-    when self.supported_format?(format, AUDIO_FORMATS)
-      'audio'
     else
       'raw'
     end
@@ -65,7 +75,7 @@ class Imagekit::Utils
     def self.imagekit_transformed_url(source, transformations)
       return source unless transformations.present?
       array = []
-      transformations.except(:resource_type, :type, :version).each do |k, v|
+      transformations.except(:image_format, :resource_type, :type, :version).each do |k, v|
         key = Imagekit::Utils::PREDEFINED_TRANSFORMATION[k.to_s]
         array << "#{key}-#{v}"
       end

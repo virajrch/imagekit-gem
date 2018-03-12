@@ -27,7 +27,7 @@ class Imagekit::CarrierWave::Storage < ::CarrierWave::Storage::Abstract
       params = uploader.transformation.dup
       params[:return_error] = true
       params[:format] = uploader.requested_format
-      params[:public_id] = uploader.my_public_id
+      params[:public_id] = uploader.my_public_id || file.filename
       uploader.versions.values.each(&:tags) # Validate no tags in versions
       params[:tags] = uploader.tags if uploader.tags
       eager_versions = uploader.versions.values.select(&:eager)
