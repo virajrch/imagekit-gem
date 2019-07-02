@@ -43,7 +43,7 @@ class Imagekit::Utils
         result = "#{url}/tr:f-auto/#{public_id}"
       end
     else
-      result = "#{url}/#{public_id}#{options[:image_format]? '.'+options[:image_format]: '' }"
+      result = "#{url}/#{public_id}#{options[:image_format] ? '.'+options[:image_format] : '' }"
     end
     return result
   end
