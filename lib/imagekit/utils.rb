@@ -37,9 +37,13 @@ class Imagekit::Utils
     end
     url = imagekit_transformed_url(source, options)
     if options[:image_format].eql?('auto')
-      result = "#{url}/tr:f-auto/#{public_id}"
+      if url.include?("tr:")
+        result = "#{url + ",f-auto"}/#{public_id}"
+      else
+        result = "#{url}/tr:f-auto/#{public_id}"
+      end
     else
-      result = "#{url}/#{public_id}.#{options[:image_format]}"
+      result = "#{url}/#{public_id}#{options[:image_format]? '.'+options[:image_format]: '' }"
     end
     return result
   end
